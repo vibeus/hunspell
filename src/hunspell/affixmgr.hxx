@@ -174,7 +174,7 @@ class AffixMgr {
                                // affix)
 
  public:
-  AffixMgr(const char* affpath, const std::vector<HashMgr*>& ptr, const char* key = NULL);
+  AffixMgr(const std::string& affcontent, const std::vector<HashMgr*>& ptr);
   ~AffixMgr();
   struct hentry* affix_check(const std::string& word,
                              int start,
@@ -343,7 +343,7 @@ class AffixMgr {
   int get_fullstrip() const;
 
  private:
-  int parse_file(const char* affpath, const char* key);
+  int parse_file(const std::string& affcontent);
   bool parse_flag(const std::string& line, unsigned short* out, FileMgr* af);
   bool parse_num(const std::string& line, int* out, FileMgr* af);
   bool parse_cpdsyllable(const std::string& line, FileMgr* af);

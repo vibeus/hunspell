@@ -72,24 +72,21 @@
 #ifndef FILEMGR_HXX_
 #define FILEMGR_HXX_
 
-#include "hunzip.hxx"
 #include <cstdio>
 #include <string>
-#include <fstream>
+#include <sstream>
 
+// vibe: FileMgr has been modified to read from a string instead of a file.
 class FileMgr {
  protected:
-  std::ifstream fin;
-  Hunzip* hin;
-  char in[BUFSIZE + 50];  // input buffer
-  int fail(const char* err, const char* par);
+  std::istringstream ss;
   int linenum;
 
  public:
-  FileMgr(const char* filename, const char* key = NULL);
+  FileMgr(const std::string& content);
   FileMgr(const FileMgr&) = delete;
   FileMgr& operator=(const FileMgr&) = delete;
-  ~FileMgr();
+  ~FileMgr() = default;
   bool getline(std::string&);
   int getlinenum();
 };

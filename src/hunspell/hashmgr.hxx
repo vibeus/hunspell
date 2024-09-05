@@ -108,7 +108,7 @@ class HashMgr {
   std::vector<replentry> reptable;
 
  public:
-  HashMgr(const char* tpath, const char* apath, const char* key = NULL);
+  HashMgr(const std::string& tcontent, const std::string& acontent);
   ~HashMgr();
 
   struct hentry* lookup(const char* word, size_t len) const;
@@ -132,7 +132,7 @@ class HashMgr {
  private:
   int get_clen_and_captype(const std::string& word, int* captype);
   int get_clen_and_captype(const std::string& word, int* captype, std::vector<w_char> &workbuf);
-  int load_tables(const char* tpath, const char* key);
+  int load_tables(const std::string& tcontent);
   int add_word(const std::string& word,
                int wcl,
                unsigned short* ap,
@@ -140,7 +140,7 @@ class HashMgr {
                const std::string* desc,
                bool onlyupcase,
                int captype);
-  int load_config(const char* affpath, const char* key);
+  int load_config(const std::string& affcontent);
   bool parse_aliasf(const std::string& line, FileMgr* af);
   int add_hidden_capitalized_word(const std::string& word,
                                   int wcl,

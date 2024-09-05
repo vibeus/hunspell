@@ -85,7 +85,7 @@
 
 // build a hash table from a munched word list
 
-HashMgr::HashMgr(const char* tpath, const char* apath, const char* key)
+HashMgr::HashMgr(const std::string& tcontent, const std::string& acontent)
     : flag_mode(FLAG_CHAR),
       complexprefixes(0),
       utf8(0),
@@ -93,10 +93,10 @@ HashMgr::HashMgr(const char* tpath, const char* apath, const char* key)
       langnum(0),
       csconv(NULL)
 {
-  load_config(apath, key);
+  load_config(acontent);
   if (!csconv)
     csconv = get_current_cs(SPELL_ENCODING);
-  int ec = load_tables(tpath, key);
+  int ec = load_tables(tcontent);
   if (ec) {
     /* error condition - what should we do here */
     HUNSPELL_WARNING(stderr, "Hash Manager Error : %d\n", ec);
@@ -559,16 +559,16 @@ struct hentry* HashMgr::walk_hashtable(int& col, struct hentry* hp) const {
 }
 
 // load a munched word list and build a hash table on the fly
-int HashMgr::load_tables(const char* tpath, const char* key) {
+int HashMgr::load_tables(const std::string& tcontent) {
   // open dictionary file
-  FileMgr* dict = new FileMgr(tpath, key);
+  FileMgr* dict = new FileMgr(tcontent);
   if (dict == NULL)
     return 1;
 
   // first read the first line of file to get hash table size
   std::string ts;
   if (!dict->getline(ts)) {
-    HUNSPELL_WARNING(stderr, "error: empty dic file %s\n", tpath);
+    HUNSPELL_WARNING(stderr, "error: empty dic content\n");
     delete dict;
     return 2;
   }
@@ -950,14 +950,14 @@ std::string HashMgr::encode_flag(unsigned short f) const {
 }
 
 // read in aff file and set flag mode
-int HashMgr::load_config(const char* affpath, const char* key) {
+int HashMgr::load_config(const std::string& affcontent) {
   int firstline = 1;
 
   // open the affix file
-  FileMgr* afflst = new FileMgr(affpath, key);
+  FileMgr* afflst = new FileMgr(affcontent);
   if (!afflst) {
     HUNSPELL_WARNING(
-        stderr, "Error - could not open affix description file %s\n", affpath);
+        stderr, "Error - could not open affix description content\n");
     return 1;
   }
 

@@ -87,9 +87,8 @@
 
 #include "csutil.hxx"
 
-AffixMgr::AffixMgr(const char* affpath,
-                   const std::vector<HashMgr*>& ptr,
-                   const char* key)
+AffixMgr::AffixMgr(const std::string& affcontent,
+                   const std::vector<HashMgr*>& ptr)
   : alldic(ptr)
   , pHMgr(ptr[0]) {
 
@@ -167,8 +166,8 @@ AffixMgr::AffixMgr(const char* affpath,
 
   memset(contclasses, 0, CONTSIZE * sizeof(char));
 
-  if (parse_file(affpath, key)) {
-    HUNSPELL_WARNING(stderr, "Failure loading aff file %s\n", affpath);
+  if (parse_file(affcontent)) {
+    HUNSPELL_WARNING(stderr, "Failure loading aff content.\n");
   }
 
   /* get encoding for CHECKCOMPOUNDCASE */
@@ -268,7 +267,7 @@ void AffixMgr::finishFileMgr(FileMgr* afflst) {
 }
 
 // read in aff file and build up prefix and suffix entry objects
-int AffixMgr::parse_file(const char* affpath, const char* key) {
+int AffixMgr::parse_file(const std::string& affcontent) {
 
   // checking flag duplication
   char dupflags[CONTSIZE];
@@ -278,10 +277,10 @@ int AffixMgr::parse_file(const char* affpath, const char* key) {
   int firstline = 1;
 
   // open the affix file
-  FileMgr* afflst = new FileMgr(affpath, key);
+  FileMgr* afflst = new FileMgr(affcontent);
   if (!afflst) {
     HUNSPELL_WARNING(
-        stderr, "error: could not open affix description file %s\n", affpath);
+        stderr, "error: could not open affix description content\n");
     return 1;
   }
 
