@@ -1769,6 +1769,12 @@ char* search(char* begin, char* name, const char* ext) {
   }
 }
 
+std::string read_file(const std::string& path) {
+  std::ifstream file(path);
+  std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+  return content;
+}
+
 int main(int argc, char** argv) {
   std::string buf;
   Hunspell* pMS[DMAX];
@@ -2095,7 +2101,11 @@ int main(int argc, char** argv) {
     if (showpath) {
       fprintf(stderr, gettext("LOADED DICTIONARY:\n%s\n%s\n"), aff, dic);
     }
-    pMS[0] = new Hunspell(aff, dic, key);
+
+    auto aff_content = read_file(aff);
+    auto dic_content = read_file(dic);
+
+    pMS[0] = new Hunspell(aff_content, dic_content);
     dic_enc[0] = pMS[0]->get_dict_encoding().c_str();
     dmax = 1;
     while (dicplus) {
@@ -2109,7 +2119,10 @@ int main(int argc, char** argv) {
       dic = search(path, dicname2, ".dic");
       if (aff && dic) {
         if (dmax < DMAX) {
-          pMS[dmax] = new Hunspell(aff, dic, key);
+          auto aff_content = read_file(aff);
+          auto dic_content = read_file(dic);
+
+          pMS[dmax] = new Hunspell(aff_content, dic_content);
           dic_enc[dmax] = pMS[dmax]->get_dict_encoding().c_str();
           dmax++;
           if (showpath) {
