@@ -110,7 +110,6 @@ AC_CONFIG_FILES([
 	src/hunspell/Makefile
 	src/hunspell/hunvisapi.h
 	src/parsers/Makefile
-	src/tools/Makefile
 	tests/Makefile
 	tests/suggestiontest/Makefile
 ])
